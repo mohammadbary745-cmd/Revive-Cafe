@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revive CAFÉ - القائمة الإلكترونية</title>
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+    <style>
+        :root {
+            --bg-primary: #0d0a08;
+            --bg-secondary: #16120e;
+            --bg-card: #1f1914;
+            --bg-card-hover: #2a221b;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #f3e5ab;
+            --accent-amber: #e58e26;
+            --text-primary: #f8f5f0;
+            --text-secondary: #baada0;
+            --text-muted: #807265;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --transition-fast: 0.25s ease;
+            --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+ 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+ 
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(229, 142, 38, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+ 
+        /* HEADER SECTION */
+        .header {
+            position: relative;
+            padding: 45px 20px 30px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(22, 18, 14, 0.95) 0%, rgba(13, 10, 8, 0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+        }
+ 
+        .header-bg-decoration {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+ 
+        .logo-container {
+            margin-bottom: 12px;
+            display: inline-block;
+            position: relative;
+        }
+ 
+        .logo-icon {
+            font-size: 42px;
+            color: var(--accent-gold);
+            filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+            animation: pulseGlow 3s infinite alternate;
+        }
+ 
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8)); }
+        }
+ 
+        .cafe-title {
+            font-size: 2.6rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 2px;
+        }
+ 
+        .cafe-slogan {
+            font-size: 0.95rem;
+            color: var(--accent-gold-light);
+            letter-spacing: 3px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+ 
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--border-color);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+ 
+        .location-badge i {
+            color: var(--accent-gold);
+        }
+ 
+        /* CURRENCY SWITCHER */
+        .currency-switch-wrapper {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+ 
+        .currency-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+ 
+        .currency-toggle {
+            display: flex;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 3px;
+        }
+ 
+        .currency-btn {
+            padding: 6px 18px;
+            border-radius: 25px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+ 
+        .currency-btn.active {
+            color: #000;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #e2b755 100%);
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+        }
+ 
+        /* CONTAINER */
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 20px 15px 80px;
+        }
+ 
+        /* SEARCH BAR */
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 25px;
+        }
+ 
+        .search-box input {
+            width: 100%;
+            padding: 14px 45px 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+ 
+        .search-box input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            background: var(--bg-card-hover);
+        }
+ 
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+        }
+ 
+        /* CATEGORIES SCROLL */
+        .categories-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 5px 20px;
+            margin-bottom: 25px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-gold) var(--bg-card);
+        }
+ 
+        .cat-btn {
+            white-space: nowrap;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+ 
+        .cat-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+ 
+        .cat-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            color: #000;
+            border-color: transparent;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.35);
+        }
+ 
+        /* SECTION HEADER */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+ 
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 80px;
+            height: 2px;
+            background: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+ 
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent-gold-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+ 
+        .items-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 2px 10px;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+ 
+        /* GRID LAYOUT */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+ 
+        /* ITEM CARD */
+        .menu-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-card);
+        }
+ 
+        .menu-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
+            background: var(--bg-card-hover);
+        }
+ 
+        .card-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 170px;
+            background: #120e0b;
+            overflow: hidden;
+        }
+ 
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+ 
+        .menu-card:hover .card-img {
+            transform: scale(1.08);
+        }
+ 
+        .card-category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(13, 10, 8, 0.8);
+            border: 1px solid var(--border-color);
+            color: var(--accent-gold-light);
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            font-weight: 600;
+        }
+ 
+        .card-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+ 
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+ 
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(212, 175, 55, 0.15);
+        }
+ 
+        .price-tag {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+ 
+        .price-currency {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+ 
+        .whatsapp-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.15);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            color: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            text-decoration: none;
+        }
+ 
+        .whatsapp-btn:hover {
+            background: #25D366;
+            color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(37, 211, 102, 0.5);
+        }
+ 
+        /* FLOATING WHATSAPP BUTTON */
+        .floating-wa {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            z-index: 100;
+            transition: var(--transition-smooth);
+        }
+ 
+        .floating-wa:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
+        }
+ 
+        .floating-wa i { font-size: 1.3rem; }
+ 
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 50px;
+        }
+ 
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+ 
+        .footer p { color: var(--text-muted); font-size: 0.85rem; }
+ 
+        @media (max-width: 600px) {
+            .cafe-title { font-size: 2rem; }
+            .items-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .card-img-wrapper { height: 130px; }
+            .card-body { padding: 12px; }
+            .card-title { font-size: 0.95rem; }
+            .price-tag { font-size: 1rem; }
+            .floating-wa span { display: none; }
+            .floating-wa { padding: 14px; border-radius: 50%; }
+        }
+    </style>
+</head>
+<body>
+ 
+    <!-- HEADER SECTION -->
+    <header class="header">
+        <div class="header-bg-decoration"></div>
+        <div class="logo-container">
+            <i class="fa-solid fa-mug-hot logo-icon"></i>
+        </div>
+        <h1 class="cafe-title">Revive CAFÉ</h1>
+
+
+<h1 class="cafe-title">
+    <a href="#" class="menu-logo">
+        <img src="1 (789).jpg" alt="Logo" style="max-width: 140px; height: auto; display: block; margin: 0 auto; border-radius: 12px;">
+    </a>
+</h1>
+        <p class="cafe-slogan"></p>
+ 
+        <div class="location-badge">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>عفرين - مقابل جامعة غازي عنتاب</span>
+        </div>
+ 
+        <!-- CURRENCY TOGGLE -->
+        <div class="currency-switch-wrapper">
+            <span class="currency-label"><i class="fa-solid fa-coins"></i> العملة المعروضة:</span>
+            <div class="currency-toggle">
+                <button class="currency-btn active" id="btn-lt" onclick="setCurrency('LT')">ليرة تركية (LT)</button>
+                <button class="currency-btn" id="btn-syp" onclick="setCurrency('SYP')">ليرة سورية (ل.س)</button>
+            </div>
+        </div>
+    </header>
+ 
+    <!-- MAIN CONTENT -->
+    <main class="container">
+ 
+        <!-- SEARCH BAR -->
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ابحث عن مشروب، وجبة، أو أركيلة..." oninput="handleSearch()">
+        </div>
+ 
+        <!-- CATEGORIES SCROLL -->
+        <div class="categories-scroll" id="categoriesNav">
+            <button class="cat-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
+            <button class="cat-btn" onclick="filterCategory('cold-drinks', this)"><i class="fa-solid fa-glass-water"></i> المشروبات الباردة</button>
+            <button class="cat-btn" onclick="filterCategory('hot-drinks', this)"><i class="fa-solid fa-mug-hot"></i> المشروبات الساخنة</button>
+            <button class="cat-btn" onclick="filterCategory('mojito', this)"><i class="fa-solid fa-martini-glass-citrus"></i> الموهيتو</button>
+            <button class="cat-btn" onclick="filterCategory('cold-coffee', this)"><i class="fa-solid fa-whiskey-glass"></i> القهوة الباردة</button>
+            <button class="cat-btn" onclick="filterCategory('cocktails', this)"><i class="fa-solid fa-wine-glass"></i> الكوكتيلات</button>
+            <button class="cat-btn" onclick="filterCategory('ice-cream', this)"><i class="fa-solid fa-ice-cream"></i> البوظة وميلك شيك</button>
+            <button class="cat-btn" onclick="filterCategory('fresh-juices', this)"><i class="fa-solid fa-lemon"></i> عصائر فريش</button>
+            <button class="cat-btn" onclick="filterCategory('food', this)"><i class="fa-solid fa-utensils"></i> مأكولات</button>
+            <button class="cat-btn" onclick="filterCategory('salads', this)"><i class="fa-solid fa-bowl-food"></i> سلطات ووافل</button>
+            <button class="cat-btn" onclick="filterCategory('shisha', this)"><i class="fa-solid fa-smog"></i> الأراكيل</button>
+        </div>
+ 
+        <!-- ITEMS DISPLAY CONTAINER -->
+        <div id="menuContainer"></div>
+        <nav class="project-menu">
+    <!-- مكان اللوجو: استبدل "logo.png" باسم مسار اللوجو لديك -->
+    <a href="#" class="menu-logo">
+        <img src="" alt="Logo">
+    </a>
+    
+    <!-- باقي روابط أو عناصر القائمة الخاصة بك -->
+    <ul class="menu-links">
+        <li><a href="#">الرئيسية</a></li>
+        <li><a href="#">المشاريع</a></li>
+        <li><a href="#">من نحن</a></li>
+        <li><a href="#">اتصل بنا</a></li>
+    </ul>
+</nav>
+ 
+    </main>
+ 
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/963936335930?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20Revive%20CAF%C3%89%2C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%AB%D8%A7%D9%84%D8%B7%D9%84%D8%A8" class="floating-wa" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>اطلب الآن عبر الواتساب</span>
+    </a>
+ 
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-logo">Revive CAFÉ</div>
+        <p>جميع الحقوق محفوظة &copy; 2026 | تصميم المنيو التفاعلي الاحترافي</p>
+    </footer>
+ 
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const menuData = [
+            // المشروبات الباردة
+            { id: 1, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "راني حبيبات", priceLT: "30", priceSYP: "90", img: "1 (66).jpg" },
+            { id: 2, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "طاقة جاك (كبير)", priceLT: "40", priceSYP: "120", img: "1 (65).jpg" },
+            { id: 3, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "طاقة جاك (صغير)", priceLT: "30", priceSYP: "90", img: "1 (64).jpg" },
+            { id: 4, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "بذور ريحان", priceLT: "40", priceSYP: "120", img: "1 (39).jpg" },
+            { id: 5, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "زوبا", priceLT: "35", priceSYP: "110", img: "1 (24).jpg" },
+            { id: 6, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "ريد بول", priceLT: "70", priceSYP: "210", img: "1 (25).jpg" },
+            { id: 7, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "بيبسي", priceLT: "35", priceSYP: "110", img: "1 (26).jpg" },
+            { id: 8, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "ميرندا", priceLT: "35", priceSYP: "110", img: "1 (27).jpg" },
+            { id: 9, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "سفن أب", priceLT: "35", priceSYP: "110", img: "1 (28).jpg" },
+            { id: 10, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "طازج رمان توت", priceLT: "30", priceSYP: "90", img: "1 (29).jpg" },
+            { id: 11, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "شراب شعير", priceLT: "45", priceSYP: "140", img: "1 (30).jpg" },
+            { id: 12, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "عصير سلس", priceLT: "35", priceSYP: "110", img: "1 (31).jpg" },
+            { id: 13, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "فريش", priceLT: "30", priceSYP: "90", img: "1 (32).jpg" },
+            { id: 14, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "XXL", priceLT: "40", priceSYP: "120", img: "1 (33).jpg" },
+            { id: 15, category: "cold-drinks", categoryName: "المشروبات الباردة", name: "آيس تي دراق", priceLT: "40", priceSYP: "120", img: "1 (34).jpg" },
+ 
+            // المشروبات الساخنة
+            { id: 16, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "كابتشينو", priceLT: "30", priceSYP: "90", img: "1 (35).jpg" },
+            { id: 17, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "ميلو", priceLT: "30", priceSYP: "90", img: "1 (36).jpg" },
+            { id: 18, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "قهوة إكسبرس", priceLT: "20", priceSYP: "60", img: "1 (37).jpg" },
+            { id: 19, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "قهوة غلي", priceLT: "25", priceSYP: "75", img: "1 (38).jpg" },
+            { id: 20, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "شاي أخضر / بابونج", priceLT: "20", priceSYP: "60", img: "1 (39).jpg" },
+            { id: 21, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "كمون ليمون", priceLT: "20", priceSYP: "60", img: "1 (40).jpg" },
+            { id: 22, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "زهورات", priceLT: "20", priceSYP: "60", img: "1 (41).jpg" },
+            { id: 23, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "تلاتة بواحد", priceLT: "20", priceSYP: "60", img: "1 (70).jfif" },
+            { id: 24, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "هوت شوكليت", priceLT: "غير ثابت", priceSYP: "غير ثابت", img: "1 (43).jpg" },
+            { id: 25, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "هوت أمريكانو", priceLT: "30", priceSYP: "90", img: "1 (44).jpg" },
+            { id: 26, category: "hot-drinks", categoryName: "المشروبات الساخنة", name: "نسكافيه", priceLT: "20", priceSYP: "60", img: "1 (45).jpg" },
+ 
+            // الموهيتو
+            { id: 27, category: "mojito", categoryName: "الموهيتو", name: "موهيتو رمان", priceLT: "75", priceSYP: "230", img: "1 (7).jpg" },
+            { id: 28, category: "mojito", categoryName: "الموهيتو", name: "موهيتو فريز", priceLT: "75", priceSYP: "230", img: "1 (8).jpg" },
+            { id: 29, category: "mojito", categoryName: "الموهيتو", name: "موهيتو توت", priceLT: "75", priceSYP: "230", img: "1 (17).jpg" },
+            { id: 30, category: "mojito", categoryName: "الموهيتو", name: "موهيتو مانغو باشن", priceLT: "75", priceSYP: "230", img: "1 (75).jpg" },
+            { id: 31, category: "mojito", categoryName: "الموهيتو", name: "موهيتو تفاح", priceLT: "75", priceSYP: "230", img: "1 (76).jpg" },
+            { id: 32, category: "mojito", categoryName: "الموهيتو", name: "موهيتو كرز", priceLT: "75", priceSYP: "230", img: "1 (1).jpg" },
+            { id: 33, category: "mojito", categoryName: "الموهيتو", name: "موهيتو دراق", priceLT: "75", priceSYP: "230", img: "1 (19).jpg" },
+            { id: 34, category: "mojito", categoryName: "الموهيتو", name: "موهيتو موج بحر", priceLT: "75", priceSYP: "230", img: "1 (2).jpg" },
+ 
+            // القهوة الباردة
+            { id: 35, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس كراميل", priceLT: "75", priceSYP: "230", img: "1 (23).jpg" },
+            { id: 36, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس فانيلا", priceLT: "75", priceSYP: "230", img: "1 (23).jpg" },
+            { id: 37, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس أمريكانو", priceLT: "50", priceSYP: "150", img: "1 (23).jpg" },
+            { id: 38, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس سبانيش لاتيه", priceLT: "75", priceSYP: "230", img: "1 (23).jpg" },
+            { id: 39, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس موكا", priceLT: "75", priceSYP: "230", img: "1 (23).jpg" },
+            { id: 40, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس لاتيه", priceLT: "75", priceSYP: "230", img: "1 (23).jpg" },
+            { id: 41, category: "cold-coffee", categoryName: "القهوة الباردة", name: "آيس كوفي أوريو", priceLT: "75", priceSYP: "230", img: "1 (23).jpg" },
+ 
+            // الكوكتيلات
+            { id: 42, category: "cocktails", categoryName: "الكوكتيلات", name: "كوكتيل فواكه", priceLT: "100", priceSYP: "300", img: "1 (98).jpg" },
+            { id: 43, category: "cocktails", categoryName: "الكوكتيلات", name: "موز بالحليب", priceLT: "100", priceSYP: "300", img: "1 (4).jpg" },
+            { id: 44, category: "cocktails", categoryName: "الكوكتيلات", name: "حليب بالفريز", priceLT: "100", priceSYP: "300", img: "1 (97).jpg" },
+            { id: 45, category: "cocktails", categoryName: "الكوكتيلات", name: "حليب موز شوكلا", priceLT: "100", priceSYP: "300", img: "1 (96).jfif" },
+            { id: 46, category: "cocktails", categoryName: "الكوكتيلات", name: "كوكتيل + مكسرات", priceLT: "120", priceSYP: "360", img: "1 (88).jfif" },
+            { id: 47, category: "cocktails", categoryName: "الكوكتيلات", name: "كوكتيل وسط", priceLT: "80", priceSYP: "240", img: "1 (98).jpg" },
+            { id: 48, category: "cocktails", categoryName: "الكوكتيلات", name: "كوكتيل كبير", priceLT: "100", priceSYP: "300", img: "1 (98).jpg" },
+ 
+            // البوظة وميلك شيك
+            { id: 49, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "بوظة (كبير)", priceLT: "50", priceSYP: "150", img: "1 (55).jpg" },
+            { id: 50, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "بوظة (صغير)", priceLT: "35", priceSYP: "105", img: "1 (54).jpg" },
+            { id: 51, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "ميلك شيك لوتس", priceLT: "100", priceSYP: "300", img: "1 (15).jpg" },
+            { id: 52, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "ميلك شيك أوريو", priceLT: "100", priceSYP: "300", img: "1 (99).jpg" },
+            { id: 53, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "ميلك شيك بستاشيو", priceLT: "100", priceSYP: "300", img: "1 (80).jfif" },
+            { id: 54, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "ميلك شيك شوكولا", priceLT: "100", priceSYP: "300", img: "1 (10).jpg" },
+            { id: 55, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "ميلك شيك نسكافيه", priceLT: "100", priceSYP: "300", img: "1 (11).jpg" },
+            { id: 56, category: "ice-cream", categoryName: "البوظة وميلك شيك", name: "ميلك شيك كرز", priceLT: "100", priceSYP: "300", img: "1 (97).jpg" },
+ 
+            // عصائر فريشimages/orange
+            { id: 57, category: "fresh-juices", categoryName: "عصائر فريش", name: "عصير برتقال", priceLT: "70", priceSYP: "210", img: "1 (23).jpg" },
+            { id: 58, category: "fresh-juices", categoryName: "عصائر فريش", name: "عصير فريز", priceLT: "90", priceSYP: "270", img: "1 (5).jpg" },
+            { id: 59, category: "fresh-juices", categoryName: "عصائر فريش", name: "عصير ليمون", priceLT: "70", priceSYP: "210", img: "1 (58).jpg" },
+            { id: 60, category: "fresh-juices", categoryName: "عصائر فريش", name: "عصير أناناس", priceLT: "70", priceSYP: "210", img: "1 (59).jpg" },
+            { id: 61, category: "fresh-juices", categoryName: "عصائر فريش", name: "عصير جبس", priceLT: "60", priceSYP: "180", img: "1 (22).jpg" },
+            { id: 62, category: "fresh-juices", categoryName: "عصائر فريش", name: "عصير بطيخ", priceLT: "60", priceSYP: "180", img: "1 (84).jfif" },
+            { id: 63, category: "fresh-juices", categoryName: "عصائر فريش", name: "بولو", priceLT: "80", priceSYP: "240", img: "1 (61).jpg" },
+ 
+            // مأكولات
+            { id: 64, category: "food", categoryName: "مأكولات", name: "توست جبن", priceLT: "20", priceSYP: "60", img: "1 (785).jpg" },
+            { id: 65, category: "food", categoryName: "مأكولات", name: "كريب شوكلا وموز", priceLT: "20", priceSYP: "60", img: "1 (786).jpg" },
+            { id: 66, category: "food", categoryName: "مأكولات", name: "ساندويش مرتديلا", priceLT: "20", priceSYP: "60", img: "1 (784).jpg" },
+            { id: 67, category: "food", categoryName: "مأكولات", name: "إندومي", priceLT: "30", priceSYP: "90", img: "1 (14).jpg" },
+ 
+            // سلطات ووافل
+            { id: 68, category: "salads", categoryName: "سلطات ووافل", name: "سلطة فواكة", priceLT: "150", priceSYP: "450", img: "1 (100).png" },
+            { id: 69, category: "salads", categoryName: "سلطات ووافل", name: "سلطة وافل فواكه", priceLT: "100", priceSYP: "300", img: "1 (81).jfif" },
+            { id: 70, category: "salads", categoryName: "سلطات ووافل", name: "سلطة وافل شوكلا", priceLT: "100", priceSYP: "300", img: "1 (82).jfif" },
+            { id: 71, category: "salads", categoryName: "سلطات ووافل", name: "سلطة وافل لوتس", priceLT: "100", priceSYP: "300", img: "1 (102).webp" },
+            { id: 72, category: "salads", categoryName: "سلطات ووافل", name: "سلطة وافل بستاشيو", priceLT: "100", priceSYP: "300", img: "1 (104).webp" },
+ 
+            // الأراكيل
+            { id: 73, category: "shisha", categoryName: "الأراكيل", name: "أركيلة بولو", priceLT: "100", priceSYP: "300", img: "1 (62).jpg" },
+            { id: 74, category: "shisha", categoryName: "الأراكيل", name: "أركيلة أداليا", priceLT: "100", priceSYP: "300", img: "1 (62).jpg" },
+            { id: 75, category: "shisha", categoryName: "الأراكيل", name: "أركيلة لوف", priceLT: "100", priceSYP: "300", img: "1 (62).jpg" },
+            { id: 76, category: "shisha", categoryName: "الأراكيل", name: "أركيلة نخلة", priceLT: "100", priceSYP: "300", img: "1 (62).jpg" },
+            { id: 77, category: "shisha", categoryName: "الأراكيل", name: "أركيلة فاخر", priceLT: "100", priceSYP: "300", img: "1 (62).jpg" }
+        ];
+ 
+        let currentCurrency = 'LT';
+        let currentCategory = 'all';
+        let searchQuery = '';
+ 
+        const defaultImageSVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%2319130e'/><circle cx='150' cy='90' r='40' fill='%232a2018'/><path d='M130 90 Q 150 110 170 90' stroke='%23d4af37' stroke-width='4' fill='none'/><text x='50%' y='160' fill='%23d4af37' font-size='16' font-family='sans-serif' text-anchor='middle'>Revive CAFÉ</text></svg>";
+ 
+        function renderMenu() {
+            const container = document.getElementById('menuContainer');
+            if(!container) return;
+            container.innerHTML = '';
+ 
+            const filteredItems = menuData.filter(item => {
+                const matchesCategory = (currentCategory === 'all' || item.category === currentCategory);
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      item.categoryName.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+ 
+            if (filteredItems.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:50px 20px; color:var(--text-muted);">
+                        <i class="fa-solid fa-mug-hot" style="font-size:3rem; color:var(--accent-gold); margin-bottom:15px; opacity:0.5;"></i>
+                        <h3>لم يتم العثور على أي نتائج</h3>
+                        <p>جرب البحث عن صنف آخر أو اختر قسماً مختلفاً</p>
+                    </div>
+                `;
+                return;
+            }
+ 
+            if (currentCategory === 'all' && searchQuery === '') {
+                const categoriesMap = {};
+                filteredItems.forEach(item => {
+                    if (!categoriesMap[item.category]) {
+                        categoriesMap[item.category] = { name: item.categoryName, items: [] };
+                    }
+                    categoriesMap[item.category].items.push(item);
+                });
+ 
+                for (let catKey in categoriesMap) {
+                    const catObj = categoriesMap[catKey];
+                    const sectionHtml = document.createElement('div');
+                    sectionHtml.className = 'menu-section';
+                    sectionHtml.innerHTML = `
+                        <div class="section-header">
+                            <h2 class="section-title"><i class="fa-solid fa-leaf"></i> ${catObj.name}</h2>
+                            <span class="items-count">${catObj.items.length} أصناف</span>
+                        </div>
+                        <div class="items-grid">
+                            ${catObj.items.map((item, index) => createCardHTML(item, index)).join('')}
+                        </div>
+                    `;
+                    container.appendChild(sectionHtml);
+                }
+            } else {
+                const sectionHtml = document.createElement('div');
+                sectionHtml.className = 'menu-section';
+                sectionHtml.innerHTML = `
+                    <div class="items-grid">
+                        ${filteredItems.map((item, index) => createCardHTML(item, index)).join('')}
+                    </div>
+                `;
+                container.appendChild(sectionHtml);
+            }
+        }
+ 
+        function createCardHTML(item, index) {
+            const priceVal = currentCurrency === 'LT' ? item.priceLT : item.priceSYP;
+            const priceSymbol = (item.priceLT === 'غير ثابت' || item.priceSYP === 'غير ثابت') ? '' : (currentCurrency === 'LT' ? 'LT' : 'ل.س');
+            const waMsg = encodeURIComponent(`مرحباً Revive CAFÉ، أرغب بطلب: ${item.name} (${priceVal} ${priceSymbol})`);
+ 
+            return `
+                <div class="menu-card">
+                    <div class="card-img-wrapper">
+                        <img src="${item.img}" alt="${item.name}" class="card-img" onerror="this.src='${defaultImageSVG}'">
+                        <span class="card-category-badge">${item.categoryName}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${item.name}</h3>
+                        <div class="card-footer">
+                            <div class="price-tag">
+                                <span>${priceVal}</span>
+                                <span class="price-currency">${priceSymbol}</span>
+                            </div>
+                            <a href="https://wa.me/963900000000?text=${waMsg}" class="whatsapp-btn" target="_blank" title="اطلب عبر الواتساب">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+ 
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            document.getElementById('btn-lt').classList.toggle('active', curr === 'LT');
+            document.getElementById('btn-syp').classList.toggle('active', curr === 'SYP');
+            renderMenu();
+        }
+ 
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            renderMenu();
+        }
+ 
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value;
+            renderMenu();
+        }
+ 
+        // Run menu render immediately on script load
+        renderMenu();
+    </script>
+</body>
+</html>
+ 
